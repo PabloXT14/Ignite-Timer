@@ -1,4 +1,5 @@
 import { Play } from 'phosphor-react'
+import { useForm } from 'react-hook-form'
 import {
   CountDownContainer,
   FormContainer,
@@ -9,10 +10,39 @@ import {
   TaskInput,
 } from './styles'
 
+/* 
+  ====== REGISTER ======
+  function register(nameInput: string) {
+    return {// métodos/eventos do input
+      onChange: () => void
+      onBlur: () => void
+      onFocus: () => void
+    }
+  }
+
+  ====== HANDLE SUBMIT ======
+  função para lidar com os dados em caso de sucesso e error dos dados
+  function handleSubmit(onValid(), onInvalid()) {...}
+
+  ====== WATCH =====
+  função para "observar" os valores dos campos do nosso formulário
+*/
+
 export function Home() {
+  const { register, handleSubmit, watch } = useForm()
+
+  // data => dados do formulário
+  function handleCreateNewCycle(data: any) {
+    console.log(data)
+  }
+
+  // lendo dados do input em tempo real
+  const task = watch('task')
+  const isButtonSubmitDisabled = !task
+
   return (
     <HomeContainer>
-      <form action="">
+      <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
         <FormContainer>
           <label htmlFor="task">Vou trabalhar em</label>
           <TaskInput
@@ -20,6 +50,7 @@ export function Home() {
             type="text"
             list="task-suggestions"
             placeholder="Dê um nome para o seu projeto"
+            {...register('task')} // pegando todas informações retornadas pelo register e acomplando no input
           />
 
           <datalist id="task-suggestions">
@@ -37,6 +68,7 @@ export function Home() {
             step={5}
             min={5}
             max={60}
+            {...register('minutesAmount', { valueAsNumber: true })}
           />
 
           <span>minutos.</span>
@@ -50,7 +82,7 @@ export function Home() {
           <span>0</span>
         </CountDownContainer>
 
-        <StartCountdownButton type="submit">
+        <StartCountdownButton disabled={isButtonSubmitDisabled} type="submit">
           <Play size={24} />
           Começar
         </StartCountdownButton>
