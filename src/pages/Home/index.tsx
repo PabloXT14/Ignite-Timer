@@ -1,5 +1,7 @@
 import { Play } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as zod from 'zod'
 import {
   CountDownContainer,
   FormContainer,
@@ -21,15 +23,26 @@ import {
   }
 
   ====== HANDLE SUBMIT ======
-  função para lidar com os dados em caso de sucesso e error dos dados
+  função para lidar com os dados em caso de sucesso e/ou erro dos dados
   function handleSubmit(onValid(), onInvalid()) {...}
 
   ====== WATCH =====
   função para "observar" os valores dos campos do nosso formulário
 */
 
+// Schema (Esquema) de validação do nosso fomulário
+const newCycleFormValidationSchema = zod.object({
+  task: zod.string().min(1, 'Informe a tarefa'),
+  minutesAmount: zod
+    .number()
+    .min(5, 'O ciclo precisa ser de no mínimo 5 minutos')
+    .max(60, 'O ciclo precisa ser de no máximo 60 minutos'),
+})
+
 export function Home() {
-  const { register, handleSubmit, watch } = useForm()
+  const { register, handleSubmit, watch, formState } = useForm({
+    resolver: zodResolver(newCycleFormValidationSchema), // passando objeto de configurações de validação do form
+  })
 
   // data => dados do formulário
   function handleCreateNewCycle(data: any) {
@@ -39,6 +52,8 @@ export function Home() {
   // lendo dados do input em tempo real
   const task = watch('task')
   const isButtonSubmitDisabled = !task
+
+  console.log(formState.errors)
 
   return (
     <HomeContainer>
@@ -66,8 +81,8 @@ export function Home() {
             type="number"
             placeholder="00"
             step={5}
-            min={5}
-            max={60}
+            // min={5}
+            // max={60}
             {...register('minutesAmount', { valueAsNumber: true })}
           />
 
