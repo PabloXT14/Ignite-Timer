@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Play } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -42,28 +43,50 @@ const newCycleFormValidationSchema = zod.object({
 /* === PEGANDO TIPAGEM DO SCHEMA DE VALIDAÇÃO DO ZOD === */
 type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
-export function Home() {
-  const { register, handleSubmit, watch, formState, reset } =
-    useForm<NewCycleFormData>({
-      resolver: zodResolver(newCycleFormValidationSchema), // passando objeto de configurações de validação do form
-      defaultValues: {
-        // objeto de configuração dos valores iniciais do objeto de validação
-        task: '',
-        minutesAmount: 0,
-      },
-    })
+interface Cycle {
+  id: string
+  task: string
+  minutesAmount: number
+}
 
-  // data => dados do formulário
+export function Home() {
+  const [cycles, setCycles] = useState<Cycle[]>([])
+  const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
+
+  const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
+    resolver: zodResolver(newCycleFormValidationSchema), // passando objeto de configurações de validação do form
+    defaultValues: {
+      // objeto de configuração dos valores iniciais do objeto de validação
+      task: '',
+      minutesAmount: 0,
+    },
+  })
+
+  // CRIANDO NOVO CICLO DE WORK
   function handleCreateNewCycle(data: NewCycleFormData) {
-    console.log(data)
+    const id = String(new Date().getTime())
+
+    const newCycle: Cycle = {
+      id,
+      task: data.task,
+      minutesAmount: data.minutesAmount,
+    }
+
+    setCycles((state) => [...state, newCycle])
+    setActiveCycleId(id)
+
     reset()
   }
+
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+
+  console.log(activeCycle)
 
   // lendo dados do input em tempo real
   const task = watch('task')
   const isButtonSubmitDisabled = !task
 
-  console.log(formState.errors)
+  // console.log(formState.errors)
   // console.log(task)
 
   return (
