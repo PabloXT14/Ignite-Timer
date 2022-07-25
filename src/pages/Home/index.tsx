@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Play } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -97,6 +97,11 @@ export function Home() {
 
   // console.log(formState.errors)
   // console.log(task)
+
+  /* ===== USE EFFECT ===== */
+  useEffect(() => {
+    console.log('Testando useEffect')
+  }, [])
 
   return (
     <HomeContainer>
