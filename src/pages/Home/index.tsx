@@ -103,6 +103,10 @@ export function Home() {
     console.log('Testando useEffect')
   }, [])
 
+  // setInterval(() => {
+  //   setAmountSecondsPassed((state) => state + 1)
+  // }, 3000)
+
   return (
     <HomeContainer>
       <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
