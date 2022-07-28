@@ -69,12 +69,19 @@ export function Home() {
 
   /* ===== USE EFFECT ===== */
   useEffect(() => {
+    let interval: number
+
     if (activeCycle) {
-      setInterval(() => {
+      interval = setInterval(() => {
         setAmountSecondsPassed(
           differenceInSeconds(new Date(), activeCycle.startDate),
         )
       }, 1000)
+    }
+
+    // utilização do return() dentro do useEffect serve para executar algo quando um componente sumir da tela, ou quando se quer apagar algo
+    return () => {
+      clearInterval(interval)
     }
   }, [activeCycle])
 
@@ -91,6 +98,7 @@ export function Home() {
 
     setCycles((state) => [...state, newCycle])
     setActiveCycleId(id)
+    setAmountSecondsPassed(0)
 
     reset()
   }
@@ -105,12 +113,14 @@ export function Home() {
   const minutes = String(minutesAmount).padStart(2, '0') // fazendo com que seja sempre 2 caracteres
   const seconds = String(secondsAmount).padStart(2, '0')
 
+  // Colando valor do timer no titulo da pagina
+  useEffect(() => {
+    document.title = `${minutes}:${seconds}`
+  }, [minutes, seconds, activeCycle])
+
   // lendo dados do input em tempo real
   const task = watch('task')
   const isButtonSubmitDisabled = !task
-
-  // console.log(formState.errors)
-  // console.log(task)
 
   return (
     <HomeContainer>
