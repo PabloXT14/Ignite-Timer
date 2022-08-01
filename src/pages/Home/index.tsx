@@ -38,7 +38,7 @@ const newCycleFormValidationSchema = zod.object({
   task: zod.string().min(1, 'Informe a tarefa'),
   minutesAmount: zod
     .number()
-    .min(5, 'O ciclo precisa ser de no mínimo 5 minutos')
+    .min(1, 'O ciclo precisa ser de no mínimo 5 minutos')
     .max(60, 'O ciclo precisa ser de no máximo 60 minutos'),
 })
 
@@ -50,6 +50,7 @@ interface Cycle {
   task: string
   minutesAmount: number
   startDate: Date
+  finishedDate?: Date
   interruptedDate?: Date
 }
 
@@ -69,15 +70,35 @@ export function Home() {
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
+  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
+
   /* ===== USE EFFECT ===== */
   useEffect(() => {
     let interval: number
 
     if (activeCycle) {
       interval = setInterval(() => {
-        setAmountSecondsPassed(
-          differenceInSeconds(new Date(), activeCycle.startDate),
+        const secondsDifference = differenceInSeconds(
+          new Date(),
+          activeCycle.startDate,
         )
+
+        if (secondsDifference >= totalSeconds) {
+          setCycles((state) => {
+            return state.map((cycle) => {
+              if (cycle.id === activeCycleId) {
+                return { ...cycle, finishedDate: new Date() }
+              } else {
+                return cycle
+              }
+            })
+          })
+          // Completando ciclo
+          setAmountSecondsPassed(totalSeconds)
+          clearInterval(interval)
+        } else {
+          setAmountSecondsPassed(secondsDifference)
+        }
       }, 1000)
     }
 
@@ -85,7 +106,7 @@ export function Home() {
     return () => {
       clearInterval(interval)
     }
-  }, [activeCycle])
+  }, [activeCycle, totalSeconds, activeCycleId])
 
   // CRIANDO NOVO CICLO DE WORK
   function handleCreateNewCycle(data: NewCycleFormData) {
@@ -106,8 +127,8 @@ export function Home() {
   }
 
   function handleInterruptCycle() {
-    setCycles(
-      cycles.map((cycle) => {
+    setCycles((state) =>
+      state.map((cycle) => {
         if (cycle.id === activeCycleId) {
           return { ...cycle, interruptedDate: new Date() }
         } else {
@@ -120,7 +141,6 @@ export function Home() {
   }
 
   /* ===== COUNTDOWN LOGIC ===== */
-  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
   const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
 
   const minutesAmount = Math.floor(currentSeconds / 60)
@@ -167,6 +187,7 @@ export function Home() {
             type="number"
             placeholder="00"
             step={5}
+            min={1}
             disabled={!!activeCycle}
             {...register('minutesAmount', { valueAsNumber: true })}
           />
