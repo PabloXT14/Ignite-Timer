@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
-import { differenceInSeconds } from 'date-fns'
+import { createContext, useState } from 'react'
+// import { differenceInSeconds } from 'date-fns'
 import { HandPalm, Play } from 'phosphor-react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+// import { useForm } from 'react-hook-form'
+// import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
 import {
   HomeContainer,
@@ -51,61 +51,43 @@ interface Cycle {
   interruptedDate?: Date
 }
 
+/* ===== CONTEXT API ===== */
+// tipagem do contexto
+interface CyclesContextType {
+  activeCycle: Cycle | undefined
+  activeCycleId: string | null
+  markCurrentCycleAsFinished: () => void
+}
+
+export const CyclesContext = createContext({} as CyclesContextType)
+
 export function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
-  const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
 
-  const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
-    resolver: zodResolver(newCycleFormValidationSchema), // passando objeto de configurações de validação do form
-    defaultValues: {
-      // objeto de configuração dos valores iniciais do objeto de validação
-      task: '',
-      minutesAmount: 0,
-    },
-  })
+  // const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
+  //   resolver: zodResolver(newCycleFormValidationSchema), // passando objeto de configurações de validação do form
+  //   defaultValues: {
+  //     // objeto de configuração dos valores iniciais do objeto de validação
+  //     task: '',
+  //     minutesAmount: 0,
+  //   },
+  // })
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
-  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
-
-  /* ===== USE EFFECT ===== */
-  useEffect(() => {
-    let interval: number
-
-    if (activeCycle) {
-      interval = setInterval(() => {
-        const secondsDifference = differenceInSeconds(
-          new Date(),
-          activeCycle.startDate,
-        )
-
-        if (secondsDifference >= totalSeconds) {
-          setCycles((state) => {
-            return state.map((cycle) => {
-              if (cycle.id === activeCycleId) {
-                return { ...cycle, finishedDate: new Date() }
-              } else {
-                return cycle
-              }
-            })
-          })
-          // Completando ciclo
-          setAmountSecondsPassed(totalSeconds)
-          clearInterval(interval)
+  function markCurrentCycleAsFinished() {
+    setCycles((state) => {
+      return state.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return { ...cycle, finishedDate: new Date() }
         } else {
-          setAmountSecondsPassed(secondsDifference)
+          return cycle
         }
-      }, 1000)
-    }
+      })
+    })
+  }
 
-    // utilização do return() dentro do useEffect serve para executar algo quando um componente sumir da tela, ou quando se quer apagar algo
-    return () => {
-      clearInterval(interval)
-    }
-  }, [activeCycle, totalSeconds, activeCycleId])
-
-  // CRIANDO NOVO CICLO DE WORK
   function handleCreateNewCycle(data: NewCycleFormData) {
     const id = String(new Date().getTime())
 
@@ -118,9 +100,9 @@ export function Home() {
 
     setCycles((state) => [...state, newCycle])
     setActiveCycleId(id)
-    setAmountSecondsPassed(0)
+    // setAmountSecondsPassed(0)
 
-    reset()
+    // reset()
   }
 
   function handleInterruptCycle() {
@@ -137,32 +119,21 @@ export function Home() {
     setActiveCycleId(null)
   }
 
-  /* ===== COUNTDOWN LOGIC ===== */
-  const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
-
-  const minutesAmount = Math.floor(currentSeconds / 60)
-  const secondsAmount = currentSeconds % 60
-
-  const minutes = String(minutesAmount).padStart(2, '0') // fazendo com que seja sempre 2 caracteres
-  const seconds = String(secondsAmount).padStart(2, '0')
-
-  // Colando valor do timer no titulo da pagina
-  useEffect(() => {
-    document.title = `${minutes}:${seconds}`
-  }, [minutes, seconds, activeCycle])
-
   // lendo dados do input em tempo real
-  const task = watch('task')
-  const isButtonSubmitDisabled = !task
+  // const task = watch('task')
+  // const isButtonSubmitDisabled = !task
 
   console.log(cycles)
 
   return (
     <HomeContainer>
-      <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
-        <NewCycleForm />
-
-        <Countdown />
+      <form /* onSubmit={handleSubmit(handleCreateNewCycle)} */ action="">
+        <CyclesContext.Provider
+          value={{ activeCycle, activeCycleId, markCurrentCycleAsFinished }}
+        >
+          {/* <NewCycleForm /> */}
+          <Countdown />
+        </CyclesContext.Provider>
 
         {activeCycle ? (
           <StopCountdownButton type="button" onClick={handleInterruptCycle}>
@@ -170,7 +141,9 @@ export function Home() {
             Interromper
           </StopCountdownButton>
         ) : (
-          <StartCountdownButton disabled={isButtonSubmitDisabled} type="submit">
+          <StartCountdownButton
+            /* disabled={isButtonSubmitDisabled} */ type="submit"
+          >
             <Play size={24} />
             Começar
           </StartCountdownButton>
