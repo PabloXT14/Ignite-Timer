@@ -8,6 +8,7 @@ import {
 } from 'react'
 import {
   addNewCycleAction,
+  continueCycleAction,
   interruptCurrentCycleAction,
   markCurrentCycleAsFinishedAction,
 } from '../reducers/cycles/actions'
@@ -27,6 +28,7 @@ interface CyclesContextType {
   setSecondsPassed: (seconds: number) => void
   createNewCycle: (data: CreateCycleData) => void
   interruptCurrentCycle: () => void
+  continueCycle: (cycleId: string) => void
 }
 
 export const CyclesContext = createContext({} as CyclesContextType)
@@ -105,6 +107,10 @@ export function CyclesContextProvider({
     dispatch(markCurrentCycleAsFinishedAction())
   }
 
+  function continueCycle(cycleId: string) {
+    dispatch(continueCycleAction(cycleId))
+  }
+
   return (
     <CyclesContext.Provider
       value={{
@@ -116,6 +122,7 @@ export function CyclesContextProvider({
         setSecondsPassed,
         createNewCycle,
         interruptCurrentCycle,
+        continueCycle,
       }}
     >
       {children}

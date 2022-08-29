@@ -5,7 +5,11 @@ import { CyclesContext } from '../../contexts/CyclesContext'
 import { HistoryContainer, HistoryList, Status } from './styles'
 
 export function History() {
-  const { cycles } = useContext(CyclesContext)
+  const { cycles, continueCycle } = useContext(CyclesContext)
+
+  function handleContinueCycle(id: string) {
+    continueCycle(id)
+  }
 
   return (
     <HistoryContainer>
@@ -24,7 +28,14 @@ export function History() {
           <tbody>
             {cycles.map((cycle) => {
               return (
-                <tr key={cycle.id}>
+                <tr
+                  key={cycle.id}
+                  onClick={() => {
+                    if (!cycle.finishedDate && cycle.interruptedDate) {
+                      handleContinueCycle(cycle.id)
+                    }
+                  }}
+                >
                   <td>{cycle.task}</td>
                   <td>{cycle.minutesAmount} minutos</td>
                   <td>

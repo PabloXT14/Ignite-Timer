@@ -50,6 +50,20 @@ export function cyclesReducer(state: CyclesState, action: any) {
         draft.activeCycleId = null
       })
     }
+    case ActionTypes.CONTINUE_CYCLE: {
+      const currentCycleId = state.cycles.findIndex((cycle) => {
+        return cycle.id === action.payload.cycleId
+      })
+
+      if (currentCycleId < 0) {
+        return state
+      }
+
+      return produce(state, (draft) => {
+        delete draft.cycles[currentCycleId].interruptedDate
+        draft.activeCycleId = action.payload.cycleId
+      })
+    }
     default:
       return state
   }
