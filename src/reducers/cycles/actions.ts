@@ -4,7 +4,7 @@ export enum ActionTypes {
   ADD_NEW_CYCLE = 'ADD_NEW_CYCLE',
   INTERRUPT_CURRENT_CYCLE = 'INTERRUPT_CURRENT_CYCLE',
   MARK_CURRENT_CYCLE_AS_FINISHED = 'MARK_CURRENT_CYCLE_AS_FINISHED',
-  CONTINUE_CYCLE = 'CONTINUE_CYCLE',
+  DELETE_CYCLE = 'DELETE_CYCLE',
 }
 
 export function addNewCycleAction(newCycle: Cycle) {
@@ -28,9 +28,9 @@ export function interruptCurrentCycleAction() {
   }
 }
 
-export function continueCycleAction(cycleId: string) {
+export function deleteCycleAction(cycleId: string) {
   return {
-    type: ActionTypes.CONTINUE_CYCLE,
+    type: ActionTypes.DELETE_CYCLE,
     payload: {
       cycleId,
     },

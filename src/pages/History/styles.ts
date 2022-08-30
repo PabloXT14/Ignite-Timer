@@ -1,4 +1,16 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+
+const buttonAnimation = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`
 
 export const HistoryContainer = styled.main`
   flex: 1;
@@ -39,6 +51,7 @@ export const HistoryList = styled.div`
       &:last-child {
         border-top-right-radius: 8px;
         padding-right: 1.5rem;
+        text-align: center;
       }
     }
 
@@ -50,12 +63,36 @@ export const HistoryList = styled.div`
       line-height: 1.6;
 
       &:first-child {
-        width: 50%;
+        width: 40%;
         padding-left: 1.5rem;
       }
 
       &:last-child {
         padding-right: 1.5rem;
+        text-align: center;
+
+        button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto;
+          padding: 0.25rem;
+          color: ${(props) => props.theme['gray-100']};
+          background: ${(props) => props.theme['red-500']};
+          border: none;
+          border-radius: 3px;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            animation: ${buttonAnimation} 0.5s linear normal;
+            background: ${(props) => props.theme['red-700']};
+          }
+
+          svg {
+            display: block;
+          }
+        }
       }
     }
   }
