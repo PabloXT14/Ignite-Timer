@@ -21,7 +21,7 @@ export const HistoryContainer = styled.main`
 
   h1 {
     font-size: 1.5rem;
-    color: ${(props) => props.theme['gray-100']};
+    color: ${(props) => props.theme['text-title']};
   }
 `
 
@@ -36,10 +36,10 @@ export const HistoryList = styled.div`
     min-width: 600px;
 
     th {
-      background-color: ${(props) => props.theme['gray-600']};
+      background-color: ${(props) => props.theme['shape-header']};
       padding: 1rem;
       text-align: left;
-      color: ${(props) => props.theme['gray-100']};
+      color: ${(props) => props.theme['color-header-table']};
       font-size: 0.875rem;
       line-height: 1.6;
 
@@ -56,8 +56,9 @@ export const HistoryList = styled.div`
     }
 
     td {
-      background-color: ${(props) => props.theme['gray-700']};
-      border-top: 4px solid ${(props) => props.theme['gray-800']};
+      background-color: ${(props) => props.theme['shape-content']};
+      color: ${(props) => props.theme['color-content-table']};
+      border-top: 4px solid ${(props) => props.theme['shape-primary']};
       padding: 1rem;
       font-size: 0.875rem;
       line-height: 1.6;
@@ -77,8 +78,8 @@ export const HistoryList = styled.div`
           justify-content: center;
           margin: 0 auto;
           padding: 0.25rem;
-          color: ${(props) => props.theme['gray-100']};
-          background: ${(props) => props.theme['red-500']};
+          color: ${(props) => props.theme['text-button']};
+          background: ${(props) => props.theme['ec-light']};
           border: none;
           border-radius: 3px;
           cursor: pointer;
@@ -86,7 +87,7 @@ export const HistoryList = styled.div`
 
           &:hover {
             animation: ${buttonAnimation} 0.5s linear normal;
-            background: ${(props) => props.theme['red-700']};
+            background: ${(props) => props.theme['ec-dark']};
           }
 
           svg {
@@ -99,9 +100,9 @@ export const HistoryList = styled.div`
 `
 
 const STATUS_COLOR = {
-  yellow: 'yellow-500',
-  green: 'green-500',
-  red: 'red-500',
+  'warning-light': 'warning-light',
+  'ignite-mid': 'ignite-mid',
+  'ec-light': 'ec-light',
 } as const // para TS entender que não poderá ser qlq string
 
 interface StatusProps {

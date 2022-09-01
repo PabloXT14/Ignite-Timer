@@ -37,15 +37,15 @@ export function History() {
                   </td>
                   <td>
                     {cycle.finishedDate && (
-                      <Status statusColor="green">Concluído</Status>
+                      <Status statusColor="ignite-mid">Concluído</Status>
                     )}
 
                     {cycle.interruptedDate && (
-                      <Status statusColor="red">Interrompido</Status>
+                      <Status statusColor="ec-light">Interrompido</Status>
                     )}
 
                     {!cycle.finishedDate && !cycle.interruptedDate && (
-                      <Status statusColor="yellow">Em andamento</Status>
+                      <Status statusColor="warning-light">Em andamento</Status>
                     )}
                   </td>
                   <td onClick={() => deleteCycle(cycle.id)}>

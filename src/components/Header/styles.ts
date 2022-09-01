@@ -17,7 +17,7 @@ export const HeaderContainer = styled.div`
       justify-content: center;
       align-items: center;
 
-      color: ${(props) => props.theme['gray-100']};
+      color: ${(props) => props.theme['text-title']};
 
       border-top: 3px solid transparent;
       border-bottom: 3px solid transparent;
@@ -25,12 +25,12 @@ export const HeaderContainer = styled.div`
       transition: all 0.2s ease;
 
       &:hover {
-        border-bottom: 3px solid ${(props) => props.theme['green-500']};
+        border-bottom: 3px solid ${(props) => props.theme['ignite-mid']};
       }
 
       /* A classe 'active' é inserida pelo react-router-dom */
       &.active {
-        color: ${(props) => props.theme['green-500']};
+        color: ${(props) => props.theme['ignite-mid']};
       }
     }
   }
@@ -50,15 +50,19 @@ export const HeaderContainer = styled.div`
       justify-content: center;
       align-items: center;
 
-      color: ${(props) => props.theme['gray-100']};
+      color: ${(props) => props.theme['text-title']};
       background: none;
       border: none;
+
+      border-top: 3px solid transparent;
+      border-bottom: 3px solid transparent;
 
       cursor: pointer;
       transition: all 0.2s ease;
 
       &:hover {
-        color: ${(props) => props.theme['green-500']};
+        /* color: ${(props) => props.theme['ignite-mid']}; */
+        border-bottom: 3px solid ${(props) => props.theme['ignite-mid']};
       }
     }
   }
