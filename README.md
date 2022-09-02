@@ -33,14 +33,14 @@ O Ignite Timer nada mais é que um projeto que permite ao usuário cronometrar a
     <img
         alt="Gif de demonstração do projeto" 
         title="Gif de demonstração do projeto" 
-        src="./.github/ignite_timer-demonstration.gif" 
+        src="./.github/images/ignite_timer-demonstration.gif" 
     />
 </p>
 
 
 ## 💻 Deploy
 
-Clique no link a seguir para executar o projeto na sua máquina: <a target="_blank" href="https://ignite-feed-lovat.vercel.app/">Link</a>
+Clique no link a seguir para executar o projeto na sua máquina: <a target="_blank" href="https://ignite-timer-pearl.vercel.app/">Link</a>
 
 
 ## 🚀 Technologies
