@@ -104,7 +104,7 @@ Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## ✍ Author
 
-<img alt="PabloXT14" title="PabloXT14" src="https://avatars.githubusercontent.com/u/71723595?s=400&u=f7a1ec0c2e1f7cd1acf79f61043dbc75b1079de6&v=4" width="100">
+<img alt="PabloXT14" title="PabloXT14" src="https://github.com/PabloXT14.png" width="100">
 <p>
     Made with 💜 by PabloXT14
 </p>
